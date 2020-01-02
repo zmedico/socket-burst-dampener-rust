@@ -33,7 +33,7 @@ FLAGS:
 OPTIONS:
         --address <ADDRESS>        Bind to the specified address [default: ]
         --load-average <LOAD>      Don't accept multiple connections unless load is below [default: 0.0]
-        --processes <PROCESSES>    Maximum number of concurrent processes [default: 1]
+        --processes <PROCESSES>    Maximum number of concurrent processes (0 means unbounded) [default: 1]
 
 ARGS:
     <PORT>      Listen on the given port number

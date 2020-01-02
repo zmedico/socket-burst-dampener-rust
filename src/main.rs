@@ -149,6 +149,7 @@ async fn main_loop(config: Config) -> Result<(), ErrorType> {
     });
 
 	let acceptable_load = |sessions: &std::collections::HashSet::<u32>| -> bool {
+		config.processes == 0 ||
 		config.load_average == 0.0 ||
         sessions.len() < 1 ||
         sessions.len() < config.processes as usize && nix::sys::sysinfo::sysinfo().unwrap().load_average().0 < config.load_average.into()
@@ -226,7 +227,7 @@ fn parse_args() -> clap::ArgMatches<'static> {
         .arg(Arg::with_name("processes")
            .long("processes")
            .value_name("PROCESSES")
-           .help("Maximum number of concurrent processes")
+           .help("Maximum number of concurrent processes (0 means unbounded)")
            .takes_value(true)
            .default_value("1"))
         .arg(Arg::with_name("PORT")
