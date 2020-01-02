@@ -149,10 +149,9 @@ async fn main_loop(config: Config) -> Result<(), ErrorType> {
     });
 
     let acceptable_load = |sessions: &std::collections::HashSet::<u32>| -> bool {
-        config.processes == 0 ||
         config.load_average == 0.0 ||
         sessions.len() < 1 ||
-        sessions.len() < config.processes as usize && nix::sys::sysinfo::sysinfo().unwrap().load_average().0 < config.load_average.into()
+        nix::sys::sysinfo::sysinfo().unwrap().load_average().0 < config.load_average.into()
     };
 
     let mut sessions = std::collections::HashSet::<u32>::new();
@@ -183,7 +182,7 @@ async fn main_loop(config: Config) -> Result<(), ErrorType> {
                 sessions.insert(child.id());
                 log::debug!("session start");
 
-                if !acceptable_load(&sessions) {
+                if config.processes as usize == sessions.len() || !acceptable_load(&sessions) {
                     accepting = false;
                 } else {
                     accept_sender.send(()).await;
