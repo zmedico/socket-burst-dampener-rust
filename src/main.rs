@@ -148,12 +148,12 @@ async fn main_loop(config: Config) -> Result<(), ErrorType> {
         waitpid_event_sender.send(Event::CoroutinePanic(result)).await;
     });
 
-	let acceptable_load = |sessions: &std::collections::HashSet::<u32>| -> bool {
-		config.processes == 0 ||
-		config.load_average == 0.0 ||
+    let acceptable_load = |sessions: &std::collections::HashSet::<u32>| -> bool {
+        config.processes == 0 ||
+        config.load_average == 0.0 ||
         sessions.len() < 1 ||
         sessions.len() < config.processes as usize && nix::sys::sysinfo::sysinfo().unwrap().load_average().0 < config.load_average.into()
-	};
+    };
 
     let mut sessions = std::collections::HashSet::<u32>::new();
     let mut accepting = true;
