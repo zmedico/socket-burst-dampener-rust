@@ -61,7 +61,6 @@ async fn waitpid_loop(sender: &Sender<Event>) -> Result<(), ErrorType> {
             if pid <= 0 {
                 break;
             }
-            use std::convert::TryInto;
             sender.send(Event::ProcessExit(pid.try_into().unwrap())).await;
         }
     }
@@ -83,7 +82,7 @@ async fn listen_loop(addresses: Vec<std::net::SocketAddr>, accept_receiver: &Rec
             let addr = *addr;
             let exit_sender = event_sender.clone();
             spawn(async move {
-                let mut listener = match TcpListener::bind(addr).await {
+                let listener = match TcpListener::bind(addr).await {
                     Ok(listener) => listener,
                     Err(e) => {
                         exit_sender.send(Event::CoroutinePanic(Err(ErrorType::from(e)))).await;
