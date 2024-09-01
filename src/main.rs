@@ -269,8 +269,7 @@ fn ipv6_bindv6only() -> bool {
     ! contents.find("0").is_some()
 }
 
-// threaded_scheduler is not needed
-#[tokio::main(basic_scheduler)]
+#[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), ErrorType> {
 
     use clap::value_t;
