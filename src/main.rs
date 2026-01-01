@@ -20,6 +20,7 @@ impl log::Log for BasicLogger {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 enum ErrorType {
     IOError(std::io::Error),
     Message(String),
